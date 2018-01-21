@@ -38,9 +38,6 @@ Elevator.prototype.update = function () {
     var floors = this.floors;
     var arcade = this.game.physics.arcade;
 
-    //console.log(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor]));
-    //console.log(elevator.currentFloor);
-
     // handle the elevator in a floor,wait
     if (!elevator.isWaiting) {
         //stay in current direction

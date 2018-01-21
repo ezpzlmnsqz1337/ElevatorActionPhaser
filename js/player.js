@@ -117,24 +117,35 @@ Player.prototype.stay = function () {
 Player.prototype.shoot = function () {
     var player = this;
     var sprite = this.sprite;
+    var game = this.game;
 
     if (player.isShooting) {
         return;
     }
 
     player.isShooting = true;
+    //actual shooting
+    //bullet properties
+    var x = sprite.position.x;
+    x += player.orientation === 'left' ? -10 : 10;
+    var y = sprite.position.y + 22;
+
     //shooting
     if (player.isDucking) {
+        y += 15;
+        new Bullet(game, x, y, player.orientation);
         sprite.animations.play('duck-shoot-' + player.orientation);
     } else if (player.isJumping) {
+        new Bullet(game, x, y, player.orientation);
         sprite.animations.play('jump-shoot-' + player.orientation);
     } else {
+        new Bullet(game, x, y, player.orientation);
         sprite.animations.play('shoot-' + player.orientation);
     }
 
     setTimeout(function () {
         player.isShooting = false;
-    }, 500);
+    }, 300);
 };
 
 Player.prototype.update = function (platforms) {
@@ -160,7 +171,7 @@ Player.prototype.update = function (platforms) {
     if (player.isDucking) {
         player.duck();
     }
-}
+};
 
 
 
