@@ -1,4 +1,4 @@
-function Door(game, x, y, color, orientation) {
+function Door(x, y, color, orientation) {
 
     // The player and its settings
     this.sprite = game.add.sprite(x, y, 'door');
@@ -17,6 +17,8 @@ function Door(game, x, y, color, orientation) {
 
     this.sprite.animations.add('blue-left-open', [0, 3, 5, 3, 0], 5, false);
     this.sprite.animations.add('blue-right-open', [1, 4, 6, 4, 1], 5, false);
+
+    this.sprite.animations.play(this.color + '-' + this.orientation);
 }
 
 Door.prototype.open = function () {

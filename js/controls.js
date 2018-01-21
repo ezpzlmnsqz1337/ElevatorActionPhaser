@@ -1,13 +1,11 @@
-function Controls(game, player) {
+function Controls(game) {
     this.game = game;
-    this.player = player;
     this.cursors = game.input.keyboard.createCursorKeys();
     this.init();
 }
 
 Controls.prototype.init = function () {
     var game = this.game;
-    var player = this.player;
     var cursors = this.cursors;
 
     cursors.space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -36,7 +34,6 @@ Controls.prototype.init = function () {
 }
 
 Controls.prototype.update = function () {
-    var player = this.player;
     var cursors = this.cursors;
 
     //  Reset the players velocity (movement)

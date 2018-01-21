@@ -1,9 +1,8 @@
-function Player(game, x, y) {
+function Player(x, y) {
     // The player and its settings
     this.sprite = game.add.sprite(x, y, 'player');
     //  Player physics properties. Give the little guy a slight bounce.
     //  We need to enable physics on the this.sprite
-    this.game = game;
     game.physics.arcade.enable(this.sprite);
     this.sprite.body.bounce.y = 0;
     this.sprite.body.gravity.y = 1200;
@@ -117,7 +116,6 @@ Player.prototype.stay = function () {
 Player.prototype.shoot = function () {
     var player = this;
     var sprite = this.sprite;
-    var game = this.game;
 
     if (player.isShooting) {
         return;
@@ -151,7 +149,6 @@ Player.prototype.shoot = function () {
 Player.prototype.update = function (platforms) {
     var player = this;
     var sprite = this.sprite;
-    var game = this.game;
     //  Collisions
     var hitPlatform = game.physics.arcade.collide(player.sprite, platforms);
     player.isOnGround = sprite.body.touching.down && hitPlatform;

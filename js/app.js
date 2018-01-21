@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1024, 768, Phaser.AUTO, '', {preload: preload, create: create, update: update});
+var game = new Phaser.Game(1280, 720, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
 function preload() {
     game.load.image('sky', 'images/sky.png');
@@ -19,6 +19,7 @@ function preload() {
 }
 
 var FLOOR_HEIGHT = 120;
+
 var player;
 var controls;
 var level1;
@@ -29,7 +30,7 @@ var scoreText;
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.world.setBounds(0, 0, 1500, 4000);
+    game.world.setBounds(0, 0, 1280, 4000);
     createLevel();
     createPlayer();
 
@@ -45,10 +46,10 @@ function update() {
 }
 
 function createLevel() {
-    level1 = new Level1(game);
+    level1 = new Level1();
     level1.create();
 }
 
 function createPlayer() {
-    player = new Player(game, 500, 500);
+    player = new Player(500, 0);
 }

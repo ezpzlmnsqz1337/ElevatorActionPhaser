@@ -1,5 +1,4 @@
-function Elevator(game, platforms, x, y, floorHeight, floors) {
-    this.game = game;
+function Elevator(platforms, x, y, floors) {
     this.sprite = platforms.create(x, y, 'elevator');
     this.sprite.scale.setTo(0.6, 1);
     this.sprite.body.immovable = true;
@@ -7,7 +6,7 @@ function Elevator(game, platforms, x, y, floorHeight, floors) {
     this.direction = 'down';
     this.floors = [];
     for (var i = 0; i < floors; i++) {
-        this.floors.push(y + (i * floorHeight));
+        this.floors.push(y + (i * FLOOR_HEIGHT));
     }
     this.currentFloor = 0;
     this.isWaiting = false;
@@ -17,7 +16,7 @@ Elevator.prototype.move = function (direction) {
     var elevator = this;
     var sprite = this.sprite;
     var floors = this.floors;
-    var arcade = this.game.physics.arcade;
+    var arcade = game.physics.arcade;
 
     if (direction === 'up') {
         elevator.direction = direction;
@@ -36,7 +35,7 @@ Elevator.prototype.update = function () {
     var elevator = this;
     var sprite = this.sprite;
     var floors = this.floors;
-    var arcade = this.game.physics.arcade;
+    var arcade = game.physics.arcade;
 
     // handle the elevator in a floor,wait
     if (!elevator.isWaiting) {
@@ -44,6 +43,9 @@ Elevator.prototype.update = function () {
         elevator.isWaiting = true;
         elevator.move(elevator.direction);
     }
+
+    console.log('');
+
     //elevator
     var zeroDistanceUp = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;
     var zeroDistanceDown = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;
