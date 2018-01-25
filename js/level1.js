@@ -1,10 +1,10 @@
-var LEFT_WALL_X = 310;
+var LEFT_WALL_X = 350;
 var LEFT_WALL_X20 = 0;
 
-var LEFT_GROUND_X = 260;
-var RIGHT_GROUND_X = 570;
-
-var RIGHT_WALL_X = 820;
+var LEFT_GROUND_X = 410;
+var RIGHT_GROUND_X = 565
+0;
+var RIGHT_WALL_X = 870;
 var RIGHT_WALL_X20 = 1300;
 
 function Level1() {
