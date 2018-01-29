@@ -2,14 +2,14 @@ var LEFT_WALL_X = 350;
 var LEFT_WALL_X20 = 0;
 
 var LEFT_GROUND_X = 410;
-var RIGHT_GROUND_X = 565
-0;
+var RIGHT_GROUND_X = 565;
 var RIGHT_WALL_X = 870;
 var RIGHT_WALL_X20 = 1300;
 
 function Level1() {
-    this.background = game.add.group();
     this.platforms = game.add.group();
+    platforms = this.platforms;
+    this.background = game.add.group();   
     this.elevators = [];
     this.doors = [];
 }
@@ -17,7 +17,7 @@ function Level1() {
 Level1.prototype.create = function () {
     var platforms = this.platforms;
 
-    this.createBackground();
+    //this.createBackground();
     platforms.enableBody = true;
     // Here we create the ground.
     var ground = platforms.create(0, game.world.height - 15, 'ground');

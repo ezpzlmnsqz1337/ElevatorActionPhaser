@@ -7,6 +7,7 @@ function Player(x, y) {
     this.sprite.body.bounce.y = 0;
     this.sprite.body.gravity.y = 1200;
     this.sprite.body.collideWorldBounds = true;
+    this.bullets = [];
 
     //custom properties
     this.orientation = 'left';
@@ -116,6 +117,7 @@ Player.prototype.stay = function () {
 Player.prototype.shoot = function () {
     var player = this;
     var sprite = this.sprite;
+    var bullets = this.bullets;
 
     if (player.isShooting) {
         return;
@@ -131,25 +133,30 @@ Player.prototype.shoot = function () {
     //shooting
     if (player.isDucking) {
         y += 15;
-        new Bullet(game, x, y, player.orientation);
+        bullets.push(new Bullet(game, x, y, player.orientation));
         sprite.animations.play('duck-shoot-' + player.orientation);
     } else if (player.isJumping) {
-        new Bullet(game, x, y, player.orientation);
+        bullets.push(new Bullet(game, x, y, player.orientation));
         sprite.animations.play('jump-shoot-' + player.orientation);
     } else {
-        new Bullet(game, x, y, player.orientation);
+        bullets.push(new Bullet(game, x, y, player.orientation));
         sprite.animations.play('shoot-' + player.orientation);
     }
 
     setTimeout(function () {
         player.isShooting = false;
-    }, 300);
+    }, 300);    
 };
 
 Player.prototype.update = function (platforms) {
     var player = this;
     var sprite = this.sprite;
+    var bullets = this.bullets;
     //  Collisions
+    for(var i =0;i<bullets.length;i++){
+        bullets[i].update(platforms);
+    }
+
     var hitPlatform = game.physics.arcade.collide(player.sprite, platforms);
     player.isOnGround = sprite.body.touching.down && hitPlatform;
 
