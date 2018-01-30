@@ -59,18 +59,9 @@ function createLevel() {
 }
 
 function createPlayer() {
-<<<<<<< HEAD
-    player = new Player(500, 3000);
-=======
     player = new Player(500, 0);
 }
 
-<<<<<<< HEAD
 function createEnemy() {
     enemies.push(new Enemy(700, 0));
-=======
-function createEnemy(){
-    enemies.push(new Enemy(700,0));
->>>>>>> 443bebff4f39d68c3b1ed882e909deaf1b59475f
->>>>>>> 4494b0ddcab952d3576cfd507bd8a18dbd5ea78c
 }

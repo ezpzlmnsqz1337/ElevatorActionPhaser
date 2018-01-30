@@ -1,22 +1,16 @@
 var LEFT_WALL_X = 320;
 var LEFT_WALL_X20 = 0;
 
-<<<<<<< HEAD
 var LEFT_GROUND_X = 320;
 var RIGHT_GROUND_X = 670;
 var RIGHT_WALL_X = 960;
 var RIGHT_WALL_X20 = 1280;
-=======
-var LEFT_GROUND_X = 410;
-var RIGHT_GROUND_X = 565;
-var RIGHT_WALL_X = 870;
-var RIGHT_WALL_X20 = 1300;
->>>>>>> 443bebff4f39d68c3b1ed882e909deaf1b59475f
+
 
 function Level1() {
     this.platforms = game.add.group();
     platforms = this.platforms;
-    this.background = game.add.group();   
+    this.background = game.add.group();
     this.elevators = [];
     this.doors = [];
 }
