@@ -7,7 +7,7 @@ function preload() {
     game.load.image('elevator', 'images/elevator.png');
     game.load.image('wall', 'images/wall.png');
     game.load.spritesheet('player', 'images/player.png', 19, 51);
-    game.load.spritesheet('enemy', 'images/player.png', 19, 51);
+    game.load.spritesheet('enemy', 'images/enemy.png', 19, 51);
     game.load.spritesheet('door', 'images/doors.png', 35, 67);
     game.load.spritesheet('bullet', 'images/bullet.png', 5, 2);
 
@@ -46,9 +46,9 @@ function create() {
 
 function update() {
     controls.update();
-    player.update(level1.platforms);    
+    player.update(level1.platforms);
     level1.update();
-    for (var i = 0; i< enemies.length ; i++) {
+    for (var i = 0; i < enemies.length; i++) {
         enemies[i].update(platforms);
     }
 }
@@ -62,6 +62,6 @@ function createPlayer() {
     player = new Player(500, 0);
 }
 
-function createEnemy(){
-    enemies.push(new Enemy(700,0));
+function createEnemy() {
+    enemies.push(new Enemy(700, 0));
 }
