@@ -1,11 +1,10 @@
-var LEFT_WALL_X = 350;
+var LEFT_WALL_X = 320;
 var LEFT_WALL_X20 = 0;
 
-var LEFT_GROUND_X = 410;
-var RIGHT_GROUND_X = 565
-0;
-var RIGHT_WALL_X = 870;
-var RIGHT_WALL_X20 = 1300;
+var LEFT_GROUND_X = 320;
+var RIGHT_GROUND_X = 670;
+var RIGHT_WALL_X = 960;
+var RIGHT_WALL_X20 = 1280;
 
 function Level1() {
     this.background = game.add.group();
@@ -27,43 +26,42 @@ Level1.prototype.create = function () {
     //floors
     //first 10 floors
     var lastY = 0;
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 9; i++) {
         var y = 100 + (i * FLOOR_HEIGHT);
         //left
-        this.createGround(LEFT_GROUND_X, y, 2.5);
-        if (i < 9) {
-            this.createWalls(LEFT_WALL_X, y); //left
-            this.createWalls(RIGHT_WALL_X - 20, y); //right
-        }
+        this.createGround(LEFT_GROUND_X, y, 2.9);
+        this.createWalls(LEFT_WALL_X, y); //left
+        this.createWalls(RIGHT_WALL_X - 20, y); //right
         var doorY = y + 60;
         //create doors
-        this.doors.push(new Door(LEFT_GROUND_X + 77, doorY, 'blue', 'left'));
-        this.doors.push(new Door(LEFT_GROUND_X + 167, doorY, 'blue', 'left'));
-        this.doors.push(new Door(RIGHT_GROUND_X + 47, doorY, 'blue', 'right'));
-        this.doors.push(new Door(RIGHT_GROUND_X + 137, doorY, 'blue', 'right'));
+        this.doors.push(new Door(LEFT_GROUND_X + 90, doorY, 'blue', 'left'));
+        this.doors.push(new Door(LEFT_GROUND_X + 175, doorY, 'blue', 'left'));
+        this.doors.push(new Door(RIGHT_GROUND_X + 80, doorY, 'blue', 'right'));
+        this.doors.push(new Door(RIGHT_GROUND_X + 165, doorY, 'blue', 'right'));
         //right
-        this.createGround(RIGHT_GROUND_X, y, 2.5);
+        this.createGround(RIGHT_GROUND_X, y, 2.9);
         lastY = y;
     }
 
     //next 20 floors are wider
+    lastY = lastY + FLOOR_HEIGHT;
     for (var i = 0; i < 20; i++) {
         var y = lastY + (i * FLOOR_HEIGHT);
         //left
-        this.createGround(LEFT_WALL_X20, y, 5.1);
-        if (i < 20) {
+        this.createGround(LEFT_WALL_X20, y, 6.1);
+        if (i < 19) {
             this.createWalls(LEFT_WALL_X20, y); //left
-            this.createWalls(RIGHT_WALL_X20, y); //right
+            this.createWalls(RIGHT_WALL_X20 - 20, y); //right
         }
         //right
-        this.createGround(RIGHT_GROUND_X, y, 5.3);
+        this.createGround(RIGHT_GROUND_X, y, 6.1);
     }
 
     this.createElevators();
 };
 
 Level1.prototype.update = function () {
-    var elevators = this;
+    var elevators = this.elevators;
     for (var i = 0; i < elevators.length; i++) {
         elevators[i].update();
     }
@@ -73,12 +71,12 @@ Level1.prototype.createBackground = function () {
     var background = this.background;
     //  A simple background for our game
     var sky = background.create(0, 0, 'sky');
-    sky.scale.setTo(1.875, 7);
+    sky.scale.setTo(2, 7);
     //building bg
     var top10FloorsBg = background.create(LEFT_WALL_X, 100, 'building-bg');
-    top10FloorsBg.scale.setTo(56, 110);
+    top10FloorsBg.scale.setTo(64, 110);
     var bottom20FloorsBg = background.create(LEFT_WALL_X20, 10 * FLOOR_HEIGHT, 'building-bg');
-    bottom20FloorsBg.scale.setTo(110, 228);
+    bottom20FloorsBg.scale.setTo(128, 228);
 };
 
 Level1.prototype.createWalls = function (x, y) {
@@ -101,5 +99,5 @@ Level1.prototype.createElevators = function () {
     var elevators = this.elevators;
     var platforms = this.platforms;
 
-    elevators.push(new Elevator(platforms, 510, 100, FLOOR_HEIGHT, 10));
+    elevators.push(new Elevator(platforms, 610, 100, FLOOR_HEIGHT, 10));
 };

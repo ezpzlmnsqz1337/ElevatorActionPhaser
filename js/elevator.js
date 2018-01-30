@@ -44,8 +44,6 @@ Elevator.prototype.update = function () {
         elevator.move(elevator.direction);
     }
 
-    console.log('');
-
     //elevator
     var zeroDistanceUp = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;
     var zeroDistanceDown = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;

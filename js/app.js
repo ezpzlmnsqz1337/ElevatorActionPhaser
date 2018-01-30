@@ -30,7 +30,7 @@ var scoreText;
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.world.setBounds(0, 0, 1280, 4000);
+    game.world.setBounds(0, 0, 1280, 3600);
     createLevel();
     createPlayer();
 
@@ -51,5 +51,5 @@ function createLevel() {
 }
 
 function createPlayer() {
-    player = new Player(500, 0);
+    player = new Player(500, 3000);
 }
