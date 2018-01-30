@@ -1,7 +1,11 @@
-function Elevator(platforms, x, y, floors) {
-    this.sprite = platforms.create(x, y, 'elevator');
-    this.sprite.scale.setTo(0.6, 1);
-    this.sprite.body.immovable = true;
+Elevator = function (game, x, y, floors) {
+    'use strict';
+    console.log(this);
+    Phaser.Sprite.call(this, game, x, y, 'elevator');
+    console.log(this);
+    game.physics.arcade.enable(this);
+    this.scale.setTo(0.6, 1);
+    this.body.immovable = true;
 
     this.direction = 'down';
     this.floors = [];
@@ -10,59 +14,69 @@ function Elevator(platforms, x, y, floors) {
     }
     this.currentFloor = 0;
     this.isWaiting = false;
+    game.add.existing(this);
 }
 
+// add a new object Phaser.Sprite as prototype of Mario 
+Elevator.prototype = Object.create(Phaser.Sprite.prototype);
+// specify the constructor
+Elevator.constructor = Elevator;
+
 Elevator.prototype.move = function (direction) {
-    var elevator = this;
-    var sprite = this.sprite;
     var floors = this.floors;
     var arcade = game.physics.arcade;
 
     if (direction === 'up') {
-        elevator.direction = direction;
-        elevator.nextFloor = elevator.currentFloor - 1 > 0 ? elevator.currentFloor - 1 : 0;
-        arcade.moveToXY(sprite, sprite.body.position.x, floors[elevator.nextFloor], 100);
-        elevator.currentFloor = elevator.nextFloor;
+        this.direction = direction;
+        this.nextFloor = this.currentFloor - 1 > 0 ? this.currentFloor - 1 : 0;
+        arcade.moveToXY(this, this.body.position.x, floors[this.nextFloor], 100);
+        this.currentFloor = this.nextFloor;
     } else if (direction === 'down') {
-        elevator.direction = direction;
-        elevator.nextFloor = elevator.currentFloor + 1 < floors.length ? elevator.currentFloor + 1 : floors.length - 1;
-        arcade.moveToXY(sprite, sprite.body.position.x, floors[elevator.nextFloor], 100);
-        elevator.currentFloor = elevator.nextFloor;
+        this.direction = direction;
+        this.nextFloor = this.currentFloor + 1 < floors.length ? this.currentFloor + 1 : floors.length - 1;
+        arcade.moveToXY(this, this.body.position.x, floors[this.nextFloor], 100);
+        this.currentFloor = this.nextFloor;
     }
 };
 
 Elevator.prototype.update = function () {
-    var elevator = this;
-    var sprite = this.sprite;
     var floors = this.floors;
     var arcade = game.physics.arcade;
 
-    // handle the elevator in a floor,wait
-    if (!elevator.isWaiting) {
+    // handle the this in a floor,wait
+    if (!this.isWaiting) {
         //stay in current direction
-        elevator.isWaiting = true;
-        elevator.move(elevator.direction);
+        this.isWaiting = true;
+        this.move(this.direction);
     }
 
-    //elevator
-    var zeroDistanceUp = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;
-    var zeroDistanceDown = Math.floor(arcade.distanceToXY(sprite, sprite.body.position.x, floors[elevator.currentFloor])) === 0;
 
-    if (elevator.direction === 'up' && zeroDistanceUp) {
-        if (elevator.currentFloor === 0) {
-            elevator.direction = 'down';
+    game.physics.arcade.collide(player, this, this.setPlayerOnElevator, null, this);
+
+    //this
+    var zeroDistanceUp = Math.floor(arcade.distanceToXY(this, this.body.position.x, floors[this.currentFloor])) === 0;
+    var zeroDistanceDown = Math.floor(arcade.distanceToXY(this, this.body.position.x, floors[this.currentFloor])) === 0;
+
+    if (this.direction === 'up' && zeroDistanceUp) {
+        if (this.currentFloor === 0) {
+            this.direction = 'down';
         }
-        sprite.body.velocity.y = 0;
+        this.body.velocity.y = 0;
         setTimeout(function () {
-            elevator.isWaiting = false;
+            this.isWaiting = false;
         }, 3000);
-    } else if (elevator.direction === 'down' && zeroDistanceDown) {
-        if (elevator.currentFloor === floors.length - 1) {
-            elevator.direction = 'up';
+    } else if (this.direction === 'down' && zeroDistanceDown) {
+        if (this.currentFloor === floors.length - 1) {
+            this.direction = 'up';
         }
-        sprite.body.velocity.y = 0;
+        this.body.velocity.y = 0;
         setTimeout(function () {
-            elevator.isWaiting = false;
+            this.isWaiting = false;
         }, 3000);
     }
+};
+
+Elevator.prototype.setPlayerOnElevator = function (elevator, player) {
+    player.isInElevator = true;
+    console.log("IS IN ELEVATOR");
 };

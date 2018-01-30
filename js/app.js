@@ -1,3 +1,4 @@
+'use strict';
 var game = new Phaser.Game(1280, 720, Phaser.AUTO, '', {preload: preload, create: create, update: update});
 
 function preload() {
@@ -29,6 +30,7 @@ var level1;
 var enemies = [];
 var score = 0;
 var scoreText;
+var maxEnemies = 10;
 
 
 function create() {
@@ -41,15 +43,14 @@ function create() {
 
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#000'});
-    controls = new Controls(game, player);
+    controls = new Controls(game);
 }
 
 function update() {
     controls.update();
-    player.update(level1.platforms);
     level1.update();
     for (var i = 0; i < enemies.length; i++) {
-        enemies[i].update(platforms);
+        //enemies[i].update(platforms);
     }
 }
 
@@ -59,9 +60,22 @@ function createLevel() {
 }
 
 function createPlayer() {
-    player = new Player(500, 0);
+    player = new Player(game, 500, 0);
 }
 
 function createEnemy() {
-    enemies.push(new Enemy(700, 0));
+    setInterval(function () {
+        if (enemies.length < maxEnemies) {
+            var doors = level1.doors;
+
+            var i = Math.floor(Math.random() * (doors.length - 0 + 1));
+            //get random doors
+            console.log(i);
+            var door = doors[i];
+            console.log(door);
+
+            enemies.push(new Enemy(game, door.position.x, door.position.y));
+            door.open();
+        }
+    }, 3000);
 }

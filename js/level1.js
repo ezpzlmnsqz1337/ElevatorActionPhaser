@@ -8,17 +8,16 @@ var RIGHT_WALL_X20 = 1280;
 
 
 function Level1() {
-    this.platforms = game.add.group();
-    platforms = this.platforms;
+    'use strict';
     this.background = game.add.group();
+    platforms = game.add.group();
     this.elevators = [];
     this.doors = [];
 }
 
 Level1.prototype.create = function () {
-    var platforms = this.platforms;
 
-    //this.createBackground();
+    this.createBackground();
     platforms.enableBody = true;
     // Here we create the ground.
     var ground = platforms.create(0, game.world.height - 15, 'ground');
@@ -36,10 +35,10 @@ Level1.prototype.create = function () {
         this.createWalls(RIGHT_WALL_X - 20, y); //right
         var doorY = y + 60;
         //create doors
-        this.doors.push(new Door(LEFT_GROUND_X + 90, doorY, 'blue', 'left'));
-        this.doors.push(new Door(LEFT_GROUND_X + 175, doorY, 'blue', 'left'));
-        this.doors.push(new Door(RIGHT_GROUND_X + 80, doorY, 'blue', 'right'));
-        this.doors.push(new Door(RIGHT_GROUND_X + 165, doorY, 'blue', 'right'));
+        this.doors.push(new Door(game, LEFT_GROUND_X + 90, doorY, 'blue', 'left'));
+        this.doors.push(new Door(game, LEFT_GROUND_X + 175, doorY, 'blue', 'left'));
+        this.doors.push(new Door(game, RIGHT_GROUND_X + 80, doorY, 'blue', 'right'));
+        this.doors.push(new Door(game, RIGHT_GROUND_X + 165, doorY, 'blue', 'right'));
         //right
         this.createGround(RIGHT_GROUND_X, y, 2.9);
         lastY = y;
@@ -65,7 +64,7 @@ Level1.prototype.create = function () {
 Level1.prototype.update = function () {
     var elevators = this.elevators;
     for (var i = 0; i < elevators.length; i++) {
-        elevators[i].update();
+        //elevators[i].update();
     }
 };
 
@@ -82,7 +81,6 @@ Level1.prototype.createBackground = function () {
 };
 
 Level1.prototype.createWalls = function (x, y) {
-    var platforms = this.platforms;
 
     var wall = platforms.create(x, y, 'wall');
     wall.scale.setTo(1, 1.3);
@@ -90,7 +88,6 @@ Level1.prototype.createWalls = function (x, y) {
 };
 
 Level1.prototype.createGround = function (x, y, width) {
-    var platforms = this.platforms;
 
     var ground = platforms.create(x, y, 'ground');
     ground.scale.setTo(width, 1);
@@ -99,7 +96,6 @@ Level1.prototype.createGround = function (x, y, width) {
 
 Level1.prototype.createElevators = function () {
     var elevators = this.elevators;
-    var platforms = this.platforms;
 
-    elevators.push(new Elevator(platforms, 610, 100, FLOOR_HEIGHT, 10));
+    elevators.push(new Elevator(game, 610, 100, 10));
 };

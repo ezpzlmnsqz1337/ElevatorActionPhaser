@@ -1,62 +1,78 @@
-function Enemy(x,y){
+Enemy = function (game, x, y) {
+    'use strict';
     // The player and its settings
-    this.sprite = game.add.sprite(x, y, 'enemy');
-    game.physics.arcade.enable(this.sprite);
-    this.sprite.body.gravity.y = 1200;
-    this.sprite.body.bounce.y = 0;
+    Phaser.Sprite.call(this, game, x, y, 'enemy');
+    game.physics.arcade.enable(this);
+    this.body.gravity.y = 1200;
+    this.body.bounce.y = 0;
 
 
     this.speed = 80;
 
     // set up animations
     //stand still
-    this.sprite.animations.add('left', [0], 10, false);
-    this.sprite.animations.add('right', [1], 10, false);
+    this.animations.add('left', [0], 10, false);
+    this.animations.add('right', [1], 10, false);
     //walk
-    this.sprite.animations.add('go-left', [12, 14], 10, true);
-    this.sprite.animations.add('go-right', [13, 15], 10, true);
+    this.animations.add('go-left', [12, 14], 10, true);
+    this.animations.add('go-right', [13, 15], 10, true);
     //shoot
-    this.sprite.animations.add('shoot-left', [6], 1, false);
-    this.sprite.animations.add('shoot-right', [7], 1, false);
+    this.animations.add('shoot-left', [6], 1, false);
+    this.animations.add('shoot-right', [7], 1, false);
     //duck
-    this.sprite.animations.add('duck-left', [4], 1, false);
-    this.sprite.animations.add('duck-right', [5], 1, false);
+    this.animations.add('duck-left', [4], 1, false);
+    this.animations.add('duck-right', [5], 1, false);
     //duck shoot
-    this.sprite.animations.add('duck-shoot-left', [10], 1, false);
-    this.sprite.animations.add('duck-shoot-right', [11], 1, false);
+    this.animations.add('duck-shoot-left', [10], 1, false);
+    this.animations.add('duck-shoot-right', [11], 1, false);
     //jump
-    this.sprite.animations.add('jump-left', [2], 1, false);
-    this.sprite.animations.add('jump-right', [3], 1, false);
+    this.animations.add('jump-left', [2], 1, false);
+    this.animations.add('jump-right', [3], 1, false);
     //jump shoot
-    this.sprite.animations.add('jump-shoot-left', [8], 1, false);
-    this.sprite.animations.add('jump-shoot-right', [9], 1, false);
-}
+    this.animations.add('jump-shoot-left', [8], 1, false);
+    this.animations.add('jump-shoot-right', [9], 1, false);
 
-Enemy.prototype.update = function(platforms){
-	var sprite = this.sprite;
+    this.animations.add('die', [13, 14, 15, 16], 2, false);
+    game.add.existing(this);
+};
 
-	var x = sprite.position.x;
-	var px = player.sprite.position.x;
+// add a new object Phaser.Sprite as prototype of Mario 
+Enemy.prototype = Object.create(Phaser.Sprite.prototype);
+// specify the constructor
+Enemy.constructor = Enemy;
 
-    game.physics.arcade.collide(sprite, platforms);
-    game.physics.arcade.overlap(sprite, player, this.colision, null, this);
+Enemy.prototype.update = function () {
 
-	if ( x < px + 40 ) {
-		sprite.body.velocity.x = this.speed;
-		sprite.animations.play('go-right');
-	} else if( x - 40 > px ) {
-		sprite.body.velocity.x = -this.speed;
-		sprite.animations.play('go-left');
-	}
-}
+    var x = this.position.x;
+    var px = player.position.x;
+    var y = this.position.y;
+    var py = player.position.y;
 
-Enemy.prototype.colision = function(enemy, player){
-	console.log(player.isJumping);
-	if(player.isJumping){
-		enemy.kill();
-	}
-}
+    game.physics.arcade.collide(this, platforms);
+    game.physics.arcade.overlap(this, player, this.colision, null, this);
 
-Enemy.prototype.die = function(){
-	var sprite = this.sprite;
-}
+    var inTheSameFloor = (y + FLOOR_HEIGHT > py && y - FLOOR_HEIGHT < py);
+
+    if (x < px && inTheSameFloor) {
+        this.body.velocity.x = this.speed;
+        this.animations.play('go-right');
+    } else if (x > px && inTheSameFloor) {
+        this.body.velocity.x = -this.speed;
+        this.animations.play('go-left');
+    } else {
+        this.animations.play('left');
+        this.body.velocity.x = 0;
+    }
+};
+
+Enemy.prototype.colision = function (enemy, player) {
+    console.log(player.isJumping);
+    if (player.isJumping) {
+        this.animations.play('die');
+        enemy.kill();
+    }
+};
+
+Enemy.prototype.die = function () {
+    this.animations.play('die');
+};
