@@ -53,22 +53,20 @@ export default class Level1 extends Phaser.State {
             this.createDoors(doorY)
             //right
             this.createGround(d.RIGHT_GROUND_X, y, 2.9)
-            lastY = y
             //next 20 floors are wider
-            lastY = lastY + d.FLOOR_HEIGHT
-            for (let i = 0; i < 20; i++) {
-                let y = lastY + (i * d.FLOOR_HEIGHT)
-                //left
-                this.createGround(d.LEFT_WALL_X20, y, 6.1)
-                if (i < 19) {
-                    this.createWalls(d.LEFT_WALL_X20, y) //left
-                    this.createWalls(d.RIGHT_WALL_X20 - 20, y) //right
-                }
-                //right
-                this.createGround(d.RIGHT_GROUND_X, y, 6.1)
-            }
-
+            lastY = y + d.FLOOR_HEIGHT
         }
+        for (let i = 0; i < 20; i++) {
+            let y = lastY + (i * d.FLOOR_HEIGHT)
+            //left
+            this.createGround(d.LEFT_WALL_X20, y, 6.1)
+            if (i < 19) {
+                this.createWalls(d.LEFT_WALL_X20, y) //left
+                this.createWalls(d.RIGHT_WALL_X20 - 20, y) //right
+            }
+            this.createGround(d.RIGHT_GROUND_X, y, 6.1)
+        }
+        //right
         this.createElevators()
         this.createEnemy()
     }
