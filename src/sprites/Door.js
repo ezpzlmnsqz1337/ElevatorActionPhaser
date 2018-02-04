@@ -16,8 +16,8 @@ export default class Door extends Phaser.Sprite {
         this.animations.add('blue-left', [0], 1, false)
         this.animations.add('blue-right', [1], 1, false)
 
-        this.animations.add('blue-left-open', [0, 3, 5, 3, 0], 5, false)
-        this.animations.add('blue-right-open', [1, 4, 6, 4, 1], 5, false)
+        this.animations.add('blue-left-open', [0, 2, 4, 2, 0], 5, false)
+        this.animations.add('blue-right-open', [1, 3, 5, 3, 1], 5, false)
 
         this.animations.play(this.color + '-' + this.direction)
         game.add.existing(this)

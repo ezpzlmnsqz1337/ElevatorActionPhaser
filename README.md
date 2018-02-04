@@ -1,20 +1,15 @@
-# Phaser + ES6 + Webpack.
-#### A bootstrap project to create games with Phaser + ES6 + Webpack.
+# Elevator Action remake using Phaser game engine
+#### Remake of the old Elevator Action game using ES6 and Phaser.
 
-![Phaser+ES6+Webpack](https://raw.githubusercontent.com/lean/phaser-es6-webpack/master/assets/images/phaser-es6-webpack.jpg)
+To create this game I used a template available here https://github.com/lean/phaser-es6-webpack
+Also the README is inspired by this repo.
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
-
-
-## Features
-- ESLINT with JavaScript Standard Style configuration
-- Next generation of Javascript
-- Browsers are automatically updated as you change project files
-- Webpack ready
-- WebFont Loader
-
-## Typescript 
-If you need typescript support checkout the ```typescript``` branch. Thanks to @MatsMaker
+## Features so far
+- player movement
+- player shooting
+- enemies spawning
+- level1 in progress
+- elevator can be controlled
 
 # Setup
 You'll need to install a few things before you have a working copy of the project.
@@ -25,7 +20,7 @@ Navigate into your workspace directory.
 
 Run:
 
-```git clone https://github.com/lean/phaser-es6-webpack.git```
+```git clone https://github.com/mazlixek/ElevatorActionPhaser.git```
 
 ## 2. Install node.js and npm:
 
@@ -91,12 +86,6 @@ cordova run ios
 This will optimize and minimize the compiled bundle.
 
 ## Credits
-Big thanks to these great repos:
+Big thanks to this great repo:
 
-https://github.com/belohlavek/phaser-es6-boilerplate
-
-https://github.com/cstuncsik/phaser-es6-demo
-
-## Contributors
-
-https://github.com/RenaudROHLINGER
+https://github.com/lean/phaser-es6-webpack

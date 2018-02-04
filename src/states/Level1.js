@@ -23,6 +23,7 @@ export default class Level1 extends Phaser.State {
         this.mainGroup.add(this.player)
         this.controls = new Controls({ game: this.game, player: this.player })
         this.elevators = []
+        this.ENEMY_RESPAWN_DELAY = 100
 
     }
 
@@ -125,6 +126,6 @@ export default class Level1 extends Phaser.State {
                 this.enemies.push(new Enemy({ game: this.game, x: door.position.x, y: door.position.y }));
                 door.open();
             }
-        }, 3000);
+        }, this.ENEMY_RESPAWN_DELAY);
     }
 }
