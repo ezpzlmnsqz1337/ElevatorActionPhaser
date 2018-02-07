@@ -6,10 +6,7 @@ export default class Enemy extends Phaser.Sprite {
     constructor({ game, x, y }) {
         super(game, x, y, 'enemy')
         game.physics.arcade.enable(this)
-        this.player = game.state.getCurrentState().player
-        this.platforms = game.state.getCurrentState().platforms
-        this.elevators = game.state.getCurrentState().elevators
-        this.bullets = game.state.getCurrentState().bullets
+        this.state = game.state.getCurrentState()
         this.body.gravity.y = 1200
         this.body.bounce.y = 0
         this.isDead = false
@@ -47,11 +44,13 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     update() {
-        game.physics.arcade.collide(this, this.platforms)
-        game.physics.arcade.overlap(this, this.player, this.colision, null, this)
+        let state = this.state
+
+        game.physics.arcade.collide(this, state.platforms)
+        game.physics.arcade.overlap(this, state.player, this.colision, null, this)
         //elevator collisions
-        for (let i = 0; i < this.elevators.length; i++) {
-            const elevator = this.elevators[i];
+        for (let i = 0; i < state.elevators.length; i++) {
+            const elevator = state.elevators[i];
             game.physics.arcade.collide(this, elevator)
         }
 
@@ -66,17 +65,19 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     goToPlayerFloor() {
+        let state = this.state
+
         let x = this.position.x
-        let px = this.player.position.x
+        let px = state.player.position.x
         let y = this.position.y
-        let py = this.player.position.y
+        let py = state.player.position.y
 
         let playerInTheSameFloor = (y + 10 > py && y - 10 < py)
         let elevatorInTheSameFloor = false
 
         //check if elevator on the same floor as enemy
         let ex = null
-        for (const elevator of this.elevators) {
+        for (const elevator of state.elevators) {
             const ey = elevator.position.y
             if (y + 70 > ey && y - 20 < ey) {
                 elevatorInTheSameFloor = true
@@ -86,11 +87,12 @@ export default class Enemy extends Phaser.Sprite {
         }
 
         if (playerInTheSameFloor) { //if player on the same floor, shoot
+            this.body.velocity.x = 0
             if (x < px) {
-                this.direction = 'left'
+                this.direction = 'right'
                 this.shoot()
             } else {
-                this.direction = 'right'
+                this.direction = 'left'
                 this.shoot()
             }
         } else {//else if elevator on the same floor go to player
@@ -107,8 +109,7 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     shoot() {
-        let bullets = this.bullets
-        console.log(this.direction)
+        let state = this.state
 
         if (this.isShooting) {
             return
@@ -124,10 +125,10 @@ export default class Enemy extends Phaser.Sprite {
         //shooting
         if (this.isDucking) {
             y += 15
-            bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction }))
+            state.bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
             this.animations.play('duck-shoot-' + this.direction)
         } else {
-            bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction }))
+            state.bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
             this.animations.play('shoot-' + this.direction)
         }
 

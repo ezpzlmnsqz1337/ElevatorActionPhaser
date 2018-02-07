@@ -126,4 +126,8 @@ export default class Level1 extends Phaser.State {
             }
         }, this.ENEMY_RESPAWN_DELAY);
     }
+
+    gameOver() {
+        console.log('gameOver')
+    }
 }
