@@ -11,6 +11,7 @@ export default class Level1 extends Phaser.State {
     init() {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.world.setBounds(0, 0, 1280, 3600);
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
         this.maxEnemies = 10
         this.background = game.add.group()
@@ -21,7 +22,7 @@ export default class Level1 extends Phaser.State {
         this.enemies = []
         this.player = new Player({ game: this.game, x: 500, y: 0 })
         this.mainGroup.add(this.player)
-        this.controls = new Controls({ game: this.game, player: this.player })
+        this.controls = new Controls({ game: this.game })
         this.elevators = []
         this.ENEMY_RESPAWN_DELAY = 100
 
@@ -32,6 +33,7 @@ export default class Level1 extends Phaser.State {
     }
 
     create() {
+
         this.createBackground()
         this.platforms.enableBody = true
         // Here we create the ground.

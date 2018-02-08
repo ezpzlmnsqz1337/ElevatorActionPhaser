@@ -24,7 +24,6 @@ export default class Door extends Phaser.Sprite {
     }
 
     open() {
-        console.log(this.color + '-' + this.direction + '-open')
         this.animations.play(this.color + '-' + this.direction + '-open')
     }
 }
