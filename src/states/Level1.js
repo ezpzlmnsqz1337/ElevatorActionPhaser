@@ -4,6 +4,7 @@ import Elevator from '../sprites/Elevator'
 import Player from '../sprites/Player'
 import Enemy from '../sprites/Enemy'
 import Controls from '../Controls'
+import Score from '../Score'
 import d from '../dimensions'
 
 export default class Level1 extends Phaser.State {
@@ -13,18 +14,20 @@ export default class Level1 extends Phaser.State {
         game.world.setBounds(0, 0, 1280, 3600);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+        this.score = new Score({ game: this.game })
         this.maxEnemies = 10
         this.background = game.add.group()
         this.doors = game.add.group()
-        this.mainGroup = game.add.group()
         this.platforms = game.add.group()
-        this.bullets = []
-        this.enemies = []
+        this.mainGroup = game.add.group()
         this.player = new Player({ game: this.game, x: 500, y: 0 })
         this.mainGroup.add(this.player)
+        this.mainGroup.add(this.score.text)
+        this.bullets = []
+        this.enemies = []
         this.controls = new Controls({ game: this.game })
         this.elevators = []
-        this.ENEMY_RESPAWN_DELAY = 100
+        this.ENEMY_RESPAWN_DELAY = 500
 
     }
 

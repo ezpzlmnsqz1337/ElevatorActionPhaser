@@ -13,6 +13,8 @@ export default class Enemy extends Phaser.Sprite {
         this.direction = 'left'
         this.isDucking = false
         this.isShooting = false
+        this.inElevator = false
+        this.activeElevator = null
 
         this.speed = 80
 
@@ -46,12 +48,12 @@ export default class Enemy extends Phaser.Sprite {
     update() {
         let state = this.state
 
-        game.physics.arcade.collide(this, state.platforms)
+        game.physics.arcade.collide(this, state.platforms, this.setOutElevator, null, this)
         game.physics.arcade.overlap(this, state.player, this.colision, null, this)
         //elevator collisions
         for (let i = 0; i < state.elevators.length; i++) {
             const elevator = state.elevators[i];
-            game.physics.arcade.collide(this, elevator)
+            game.physics.arcade.collide(this, elevator, this.setInElevator, null, this)
         }
 
         if (this.isDead) {
@@ -62,6 +64,22 @@ export default class Enemy extends Phaser.Sprite {
 
         //look for player
         this.goToPlayerFloor()
+    }
+
+    setOutElevator(enemy, platform) {
+        let delay = 300;
+        setTimeout(() => {
+            this.elevator = null
+            this.inElevator = false
+        }, 300)
+    }
+
+    setInElevator(enemy, elevator) {
+        let delay = 300;
+        setTimeout(() => {
+            this.elevator = elevator
+            this.inElevator = true
+        }, 300)
     }
 
     goToPlayerFloor() {
@@ -86,26 +104,52 @@ export default class Enemy extends Phaser.Sprite {
             }
         }
 
-        if (playerInTheSameFloor) { //if player on the same floor, shoot
-            this.body.velocity.x = 0
-            if (x < px) {
-                this.direction = 'right'
-                this.shoot()
-            } else {
-                this.direction = 'left'
-                this.shoot()
+        if (playerInTheSameFloor) {
+            if (this.inElevator) {
+                if (x < px) {
+                    this.go('right')
+                } else {
+                    this.go('left')
+                }
+            } else {//if player on the same floor, shoot and not in elevator
+                this.body.velocity.x = 0
+                if (x < px) {
+                    this.direction = 'right'
+                    this.shoot()
+                } else {
+                    this.direction = 'left'
+                    this.shoot()
+                }
             }
-        } else {//else if elevator on the same floor go to player
-            if (elevatorInTheSameFloor && x < ex) {
-                this.direction = 'right'
-                this.body.velocity.x = this.speed
-                this.animations.play('go-' + this.direction)
+        } else {
+            if (this.inElevator) {
+                this.stay()
+                if (py < y) {
+                    this.elevator.move('up')
+                } else {
+                    this.elevator.move('down')
+                }
+            } else if (elevatorInTheSameFloor && x < ex + 20) {//else if elevator on the same floor go to player
+                this.go('right')
             } else if (elevatorInTheSameFloor && x > ex) {
-                this.direction = 'left'
-                this.body.velocity.x = -this.speed
-                this.animations.play('go-' + this.direction)
+                this.go('left')
             }
         }
+    }
+
+    stay() {
+        this.body.velocity.x = 0;
+        this.animations.play(this.direction)
+    }
+
+    go(direction) {
+        this.direction = direction
+        if (direction == 'left') {
+            this.body.velocity.x = -this.speed
+        } else {
+            this.body.velocity.x = this.speed
+        }
+        this.animations.play('go-' + this.direction)
     }
 
     shoot() {
@@ -140,6 +184,9 @@ export default class Enemy extends Phaser.Sprite {
     colision(enemy, player) {
         console.log(player.isJumping)
         if (player.isJumping) {
+            if (!this.isDead) {
+                this.state.score.addJumpKill()
+            }
             this.die()
         }
     }

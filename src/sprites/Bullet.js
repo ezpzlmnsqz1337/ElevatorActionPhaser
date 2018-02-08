@@ -38,6 +38,7 @@ export default class Bullet extends Phaser.Sprite {
     if (bullet.shooter === 'player') {
       bullet.kill()
       enemy.die()
+      this.state.score.addKill()
     }
   }
 
