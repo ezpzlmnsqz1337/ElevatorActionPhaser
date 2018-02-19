@@ -24,26 +24,28 @@ export default class Player extends Phaser.Sprite {
 
         // set up animations
         //stand still
-        this.animations.add('left', [0], 10, false)
-        this.animations.add('right', [1], 10, false)
+        this.animations.add('left', ['left.png'], 10, false)
+        this.animations.add('right', ['right.png'], 10, false)
         //walk
-        this.animations.add('go-left', [12, 14], 10, true)
-        this.animations.add('go-right', [13, 15], 10, true)
+        this.animations.add('go-left', ['go-left-1.png', 'go-left-2.png'], 10, true)
+        this.animations.add('go-right', ['go-right-1.png', 'go-right-2.png'], 10, true)
         //shoot
-        this.animations.add('shoot-left', [6], 1, false)
-        this.animations.add('shoot-right', [7], 1, false)
+        this.animations.add('shoot-left', ['shoot-left.png'], 1, false)
+        this.animations.add('shoot-right', ['shoot-right.png'], 1, false)
         //duck
-        this.animations.add('duck-left', [4], 1, false)
-        this.animations.add('duck-right', [5], 1, false)
+        this.animations.add('duck-left', ['duck-left.png'], 1, false)
+        this.animations.add('duck-right', ['duck-right.png'], 1, false)
         //duck shoot
-        this.animations.add('duck-shoot-left', [10], 1, false)
-        this.animations.add('duck-shoot-right', [11], 1, false)
+        this.animations.add('duck-shoot-left', ['duck-shoot-left.png'], 1, false)
+        this.animations.add('duck-shoot-right', ['duck-shoot-right.png'], 1, false)
         //jump
-        this.animations.add('jump-left', [2], 1, false)
-        this.animations.add('jump-right', [3], 1, false)
+        this.animations.add('jump-left', ['jump-left.png'], 1, false)
+        this.animations.add('jump-right', ['jump-right.png'], 1, false)
         //jump shoot
-        this.animations.add('jump-shoot-left', [8], 1, false)
-        this.animations.add('jump-shoot-right', [9], 1, false)
+        this.animations.add('jump-shoot-left', ['jump-shoot-left.png'], 1, false)
+        this.animations.add('jump-shoot-right', ['jump-shoot-right.png'], 1, false)
+
+        console.log(this.body)
 
         game.add.existing(this)
     }
