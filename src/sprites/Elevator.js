@@ -20,9 +20,10 @@ export default class Elevator extends Phaser.Sprite {
     }
 
     move(direction) {
-        clearTimeout(this.elevatorTimeout)
         let floors = this.floors
         let arcade = this.game.physics.arcade
+
+        clearTimeout(this.elevatorTimeout)
 
         if (direction === 'up') {
             this.direction = direction
@@ -36,19 +37,27 @@ export default class Elevator extends Phaser.Sprite {
             this.currentFloor = this.nextFloor
         }
     }
+
+    moveByEnemy(direction) {
+        if (this.isWaiting) {
+            console.log('ELEVATOR MOVE')
+            this.move(direction)
+        }
+    }
+
     update() {
         let floors = this.floors
         let arcade = game.physics.arcade
 
-        // handle the this in a floor,wait
+        // handle the elevator in a floor,wait
         if (!this.isWaiting) {
-            //stay in current direction
+            // stay in current direction
             this.isWaiting = true
             this.move(this.direction)
         }
         game.physics.arcade.collide(this.player, this, this.setPlayerOnElevator, null, this)
 
-        //this
+        // elevator
         let zeroDistanceUp = Math.floor(arcade.distanceToXY(this, this.body.position.x, floors[this.currentFloor])) === 0
         let zeroDistanceDown = Math.floor(arcade.distanceToXY(this, this.body.position.x, floors[this.currentFloor])) === 0
 

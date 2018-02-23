@@ -48,7 +48,8 @@ export default class Enemy extends Phaser.Sprite {
     update() {
         let state = this.state
 
-        game.physics.arcade.collide(this, state.platforms, this.setOutElevator, null, this)
+        let hitElevator = game.physics.arcade.collide(this, state.platforms, this.setOutElevator, null, this)
+
         game.physics.arcade.overlap(this, state.player, this.colision, null, this)
         //elevator collisions
         for (let i = 0; i < state.elevators.length; i++) {
@@ -125,9 +126,9 @@ export default class Enemy extends Phaser.Sprite {
             if (this.inElevator) {
                 this.stay()
                 if (py < y) {
-                    this.elevator.move('up')
+                    this.elevator.moveByEnemy('up')
                 } else {
-                    this.elevator.move('down')
+                    this.elevator.moveByEnemy('down')
                 }
             } else if (elevatorInTheSameFloor && x < ex + 20) {//else if elevator on the same floor go to player
                 this.go('right')

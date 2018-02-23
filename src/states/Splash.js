@@ -33,6 +33,8 @@ export default class extends Phaser.State {
     game.load.spritesheet('shoot', '../assets/images/controls/btn-fire.png', 150, 150);
     game.load.spritesheet('restart', '../assets/images/controls/restart.png', 50, 50);
     game.load.spritesheet('showMobileControls', '../assets/images/controls/show-mobile-controls.png', 180, 120);
+
+    game.load.start()
   }
 
   create() {
