@@ -18,7 +18,9 @@ export default class extends Phaser.State {
     game.load.image('ground', '../assets/images/platform.png');
     game.load.image('elevator', '../assets/images/elevator.png');
     game.load.image('wall', '../assets/images/wall.png');
-    game.load.spritesheet('player', '../assets/images/player.png', 19, 51);
+    //game.load.spritesheet('player', '../assets/images/player.png', 19, 51);
+    game.load.atlasJSONHash('player', '../assets/images/player/player.png', '../assets/images/player/player.json');
+
     game.load.spritesheet('enemy', '../assets/images/enemy.png', 19, 51);
     game.load.spritesheet('door', '../assets/images/doors.png', 35, 67);
     game.load.spritesheet('bullet', '../assets/images/bullet.png', 5, 2);

@@ -77,6 +77,8 @@ export default class Level1 extends Phaser.State {
     }
 
     update() {
+        //game.debug.spriteBounds(this.player);
+        game.debug.body(this.player);
         this.controls.update();
     }
 
