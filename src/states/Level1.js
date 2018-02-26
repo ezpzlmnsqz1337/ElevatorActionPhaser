@@ -10,25 +10,29 @@ import d from '../dimensions'
 export default class Level1 extends Phaser.State {
 
     init() {
+        //constants
+        this.ENEMY_RESPAWN_DELAY = 500
+        this.maxEnemies = 10
+
+        //physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.world.setBounds(0, 0, 1280, 3600);
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-        this.score = new Score({ game: this.game })
-        this.maxEnemies = 10
+        //groups
         this.background = game.add.group()
         this.doors = game.add.group()
         this.platforms = game.add.group()
         this.mainGroup = game.add.group()
+        this.bullets = game.add.group()
+        this.enemies = game.add.group()
+        this.elevators = game.add.group();
+
+        this.score = new Score({ game: this.game })
         this.player = new Player({ game: this.game, x: 500, y: 0 })
         this.mainGroup.add(this.player)
         this.mainGroup.add(this.score.text)
-        this.bullets = []
-        this.enemies = []
         this.controls = new Controls({ game: this.game })
-        this.elevators = []
-        this.ENEMY_RESPAWN_DELAY = 500
-
     }
 
     preload() {
@@ -114,21 +118,19 @@ export default class Level1 extends Phaser.State {
     }
 
     createElevators() {
-        console.log(this.elevators)
-        this.elevators.push(new Elevator({ game: this.game, x: 610, y: 100, floors: 10 }))
-        console.log(this.elevators)
+        this.elevators.add(new Elevator({ game: this.game, x: 610, y: 100, floors: 10, startFloor: 0, startDirection: 'down', speed: 3000 }))
     }
 
     createEnemy() {
         setInterval(() => {
-            if (this.enemies.length < this.maxEnemies) {
+            if (this.enemies.children.length < this.maxEnemies) {
                 let doors = this.doors;
 
                 let i = Math.floor(Math.random() * (doors.length - 0 + 1));
 
                 let door = doors.getAt(i);
 
-                this.enemies.push(new Enemy({ game: this.game, x: door.position.x, y: door.position.y }));
+                this.enemies.add(new Enemy({ game: this.game, x: door.position.x, y: door.position.y }));
                 door.open();
             }
         }, this.ENEMY_RESPAWN_DELAY);

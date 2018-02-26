@@ -61,22 +61,18 @@ export default class Player extends Phaser.Sprite {
     }
 
     update() {
-        let bullets = this.state.bullets
-        //  Collisions
-        for (let i = 0; i < bullets.length; i++) {
-            bullets[i].update()
-        }
+        //elevators
+        let elevatorCollide = game.physics.arcade.collide(this.state.elevators, this, this.setInElevator, null, this)
 
-        let hitPlatform = game.physics.arcade.collide(this, this.state.platforms)
-        this.isOnGround = this.body.touching.down && hitPlatform
-
-        if (this.isOnGround) {
-            this.isJumping = false
-            this.isInElevator = false
+        if (!elevatorCollide) {
             this.activeElevator = null
         }
 
-        if (this.isInElevator) {
+        //platforms
+        let hitPlatform = game.physics.arcade.collide(this, this.state.platforms)
+        this.isOnGround = this.body.touching.down && hitPlatform
+
+        if (this.isOnGround || this.activeElevator) {
             this.isJumping = false
         }
 
@@ -159,11 +155,11 @@ export default class Player extends Phaser.Sprite {
     }
 
     shoot() {
-        let bullets = this.state.bullets
-
         if (this.isShooting) {
             return
         }
+
+        let bullets = this.state.bullets
 
         this.isShooting = true
         //actual shooting
@@ -176,15 +172,15 @@ export default class Player extends Phaser.Sprite {
         if (this.isDucking) {
             this.body.height = this.DUCK_HEIGHT
             y += 15
-            bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
+            bullets.add(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
             this.animations.play('duck-shoot-' + this.direction)
         } else if (this.isJumping) {
             this.body.height = this.JUMP_HEIGHT
-            bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
+            bullets.add(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
             this.animations.play('jump-shoot-' + this.direction)
         } else {
             this.body.height = this.STANDUP_HEIGHT
-            bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
+            bullets.add(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'player' }))
             this.animations.play('shoot-' + this.direction)
         }
 
@@ -204,5 +200,9 @@ export default class Player extends Phaser.Sprite {
         if (this.lives === 0) {
             this.state.gameOver()
         }
+    }
+
+    setInElevator(player, elevator) {
+        this.activeElevator = elevator
     }
 }

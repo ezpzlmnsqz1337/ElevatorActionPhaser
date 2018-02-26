@@ -23,15 +23,10 @@ export default class Bullet extends Phaser.Sprite {
     let state = this.state
     //player overlap check
     game.physics.arcade.overlap(this, state.player, this.killPlayer, null, this)
-
-    //enemies overlap check
+    //platforms overlap check
     game.physics.arcade.overlap(this, state.platforms, this.remove, null, this)
-    for (let i = 0; i < state.enemies.length; i++) {
-      let enemy = state.enemies[i];
-      if (!enemy.isDead) {
-        game.physics.arcade.overlap(this, enemy, this.removeEnemy, null, this)
-      }
-    }
+    //enemies overlap check
+    game.physics.arcade.overlap(this, state.enemies, this.removeEnemy, null, this)
   }
 
   removeEnemy(bullet, enemy) {

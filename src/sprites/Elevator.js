@@ -2,20 +2,30 @@ import Phaser from 'phaser'
 import d from '../dimensions'
 
 export default class Elevator extends Phaser.Sprite {
-    constructor({ game, x, y, floors }) {
+    constructor({ game, x, y, floors, startFloor, startDirection, speed }) {
         super(game, x, y, 'elevator')
+        //physics
         game.physics.arcade.enable(this)
         this.scale.setTo(0.6, 1)
         this.body.immovable = true
-        this.direction = 'down'
+
+        //params
+        this.ELEVATOR_SPEED = speed
+        this.direction = startDirection
+        this.currentFloor = startFloor
+        this.isMoving = false
+
+
+        //elevator timeout
+        this.elevatorTimeout = setTimeout(() => {
+            this.move(this.direction)
+        }, this.ELEVATOR_SPEED)
+
         this.floors = []
         for (let i = 0; i < floors; i++) {
             this.floors.push(y + (i * d.FLOOR_HEIGHT))
         }
-        this.currentFloor = 0
-        this.isWaiting = false
-        this.player = game.state.getCurrentState().player
-        this.elevatorTimeout = null
+
         game.add.existing(this)
     }
 
@@ -23,39 +33,33 @@ export default class Elevator extends Phaser.Sprite {
         let floors = this.floors
         let arcade = this.game.physics.arcade
 
-        clearTimeout(this.elevatorTimeout)
+        console.log("DIRECTION: " + direction)
+        if (direction !== this.direction || (direction === this.direction && !this.isMoving)) {
+            //only work if the direction has changed or  if direction is the same and the elevator is waiting in a floor, i.e. not moving
+            clearTimeout(this.elevatorTimeout)
 
-        if (direction === 'up') {
             this.direction = direction
-            this.nextFloor = this.currentFloor - 1 > 0 ? this.currentFloor - 1 : 0
-            arcade.moveToXY(this, this.body.position.x, floors[this.nextFloor], 100)
-            this.currentFloor = this.nextFloor
-        } else if (direction === 'down') {
-            this.direction = direction
-            this.nextFloor = this.currentFloor + 1 < floors.length ? this.currentFloor + 1 : floors.length - 1
-            arcade.moveToXY(this, this.body.position.x, floors[this.nextFloor], 100)
-            this.currentFloor = this.nextFloor
-        }
-    }
+            this.isMoving = true
 
-    moveByEnemy(direction) {
-        if (this.isWaiting) {
-            console.log('ELEVATOR MOVE')
-            this.move(direction)
+            if (direction === 'up') {
+                let nextFloor = this.currentFloor - 1 > 0 ? this.currentFloor - 1 : 0
+                arcade.moveToXY(this, this.body.position.x, floors[nextFloor], 100)
+                this.currentFloor = nextFloor
+            } else if (direction === 'down') {
+                let nextFloor = this.currentFloor + 1 < floors.length ? this.currentFloor + 1 : floors.length - 1
+                arcade.moveToXY(this, this.body.position.x, floors[nextFloor], 100)
+                this.currentFloor = nextFloor
+            }
+
+            this.elevatorTimeout = setTimeout(() => {
+                this.move(this.direction)
+            }, this.ELEVATOR_SPEED)
         }
     }
 
     update() {
         let floors = this.floors
         let arcade = game.physics.arcade
-
-        // handle the elevator in a floor,wait
-        if (!this.isWaiting) {
-            // stay in current direction
-            this.isWaiting = true
-            this.move(this.direction)
-        }
-        game.physics.arcade.collide(this.player, this, this.setPlayerOnElevator, null, this)
 
         // elevator
         let zeroDistanceUp = Math.floor(arcade.distanceToXY(this, this.body.position.x, floors[this.currentFloor])) === 0
@@ -66,22 +70,14 @@ export default class Elevator extends Phaser.Sprite {
                 this.direction = 'down'
             }
             this.body.velocity.y = 0
-            this.elevatorTimeout = setTimeout(() => {
-                this.isWaiting = false
-            }, 3000)
+            this.isMoving = false
+
         } else if (this.direction === 'down' && zeroDistanceDown) {
             if (this.currentFloor === floors.length - 1) {
                 this.direction = 'up'
             }
             this.body.velocity.y = 0
-            this.elevatorTimeout = setTimeout(() => {
-                this.isWaiting = false
-            }, 3000)
+            this.isMoving = false
         }
-    }
-
-    setPlayerOnElevator(player, elevator) {
-        player.isInElevator = true
-        player.activeElevator = elevator
     }
 }

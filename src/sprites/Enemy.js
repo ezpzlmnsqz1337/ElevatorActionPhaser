@@ -5,6 +5,7 @@ import d from '../dimensions'
 export default class Enemy extends Phaser.Sprite {
     constructor({ game, x, y }) {
         super(game, x, y, 'enemy')
+        //physics
         game.physics.arcade.enable(this)
         this.state = game.state.getCurrentState()
         this.body.gravity.y = 1200
@@ -15,6 +16,7 @@ export default class Enemy extends Phaser.Sprite {
         this.isShooting = false
         this.inElevator = false
         this.activeElevator = null
+        this.anchor.setTo(0.5, 1)
 
         this.speed = 80
 
@@ -52,10 +54,7 @@ export default class Enemy extends Phaser.Sprite {
 
         game.physics.arcade.overlap(this, state.player, this.colision, null, this)
         //elevator collisions
-        for (let i = 0; i < state.elevators.length; i++) {
-            const elevator = state.elevators[i];
-            game.physics.arcade.collide(this, elevator, this.setInElevator, null, this)
-        }
+        game.physics.arcade.collide(this, state.elevators, this.setInElevator, null, this)
 
         if (this.isDead) {
             this.body.velocity.x = 0
@@ -76,6 +75,9 @@ export default class Enemy extends Phaser.Sprite {
     }
 
     setInElevator(enemy, elevator) {
+        if (this.body.touching.right || this.body.touching.left) {
+            return
+        }
         let delay = 300;
         setTimeout(() => {
             this.elevator = elevator
@@ -91,14 +93,14 @@ export default class Enemy extends Phaser.Sprite {
         let y = this.position.y
         let py = state.player.position.y
 
-        let playerInTheSameFloor = (y + 10 > py && y - 10 < py)
+        let playerInTheSameFloor = (y + 10 > py && y - 50 < py)
         let elevatorInTheSameFloor = false
 
         //check if elevator on the same floor as enemy
         let ex = null
-        for (const elevator of state.elevators) {
+        for (const elevator of state.elevators.children) {
             const ey = elevator.position.y
-            if (y + 70 > ey && y - 20 < ey) {
+            if (y + 10 > ey && y - 50 < ey) {
                 elevatorInTheSameFloor = true
                 ex = elevator.position.x //set x position of the elevator so that the enemy can goto the elevator
                 break
@@ -113,7 +115,7 @@ export default class Enemy extends Phaser.Sprite {
                     this.go('left')
                 }
             } else {//if player on the same floor, shoot and not in elevator
-                this.body.velocity.x = 0
+                this.stay()
                 if (x < px) {
                     this.direction = 'right'
                     this.shoot()
@@ -126,14 +128,18 @@ export default class Enemy extends Phaser.Sprite {
             if (this.inElevator) {
                 this.stay()
                 if (py < y) {
-                    this.elevator.moveByEnemy('up')
+                    this.elevator.move('up')
                 } else {
-                    this.elevator.moveByEnemy('down')
+                    this.elevator.move('down')
                 }
             } else if (elevatorInTheSameFloor && x < ex + 20) {//else if elevator on the same floor go to player
+                console.log('elevator in the same floorand x < ex')
                 this.go('right')
             } else if (elevatorInTheSameFloor && x > ex) {
+                console.log('elevator in the same floorand x > ex')
                 this.go('left')
+            } else {
+                this.stay()
             }
         }
     }
@@ -165,15 +171,15 @@ export default class Enemy extends Phaser.Sprite {
         //bullet properties
         let x = this.position.x
         x += this.direction === 'left' ? -15 : 15
-        let y = this.position.y + 22
+        let y = this.position.y - 35
 
         //shooting
         if (this.isDucking) {
             y += 15
-            state.bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
+            state.bullets.add(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
             this.animations.play('duck-shoot-' + this.direction)
         } else {
-            state.bullets.push(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
+            state.bullets.add(new Bullet({ game: this.game, x: x, y: y, direction: this.direction, shooter: 'enemy' }))
             this.animations.play('shoot-' + this.direction)
         }
 

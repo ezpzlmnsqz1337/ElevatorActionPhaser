@@ -77,7 +77,7 @@ export default class Controls {
     }
 
     handleDownKey() {
-        if (this.player.isInElevator) {
+        if (this.player.activeElevator) {
             this.player.moveElevator('down')
         } else if (this.player.isOnGround) {
             //  Ducking
@@ -86,7 +86,7 @@ export default class Controls {
     }
 
     handleUpKey() {
-        if (this.player.isInElevator) {
+        if (this.player.activeElevator) {
             this.player.moveElevator('up')
         } else if (this.player.isDucking) {
             this.player.standUp()
