@@ -33,6 +33,7 @@ export default class Level1 extends Phaser.State {
         this.mainGroup.add(this.player)
         this.mainGroup.add(this.score.text)
         this.controls = new Controls({ game: this.game })
+        this.fps = game.add.text(150, 0, "0")
     }
 
     preload() {
@@ -40,6 +41,7 @@ export default class Level1 extends Phaser.State {
     }
 
     create() {
+        game.time.advancedTiming = true;
 
         this.createBackground()
         this.platforms.enableBody = true
@@ -81,9 +83,13 @@ export default class Level1 extends Phaser.State {
     }
 
     update() {
-        //game.debug.spriteBounds(this.player);
-        game.debug.body(this.player);
         this.controls.update();
+    }
+
+    render() {
+        this.fps.setText(game.time.fps);
+        game.debug.body(this.player);
+
     }
 
     createBackground() {
