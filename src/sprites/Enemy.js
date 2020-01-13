@@ -96,7 +96,7 @@ export default class Enemy extends Phaser.Sprite {
         let playerInTheSameFloor = (y + 10 > py && y - 50 < py)
         let elevatorInTheSameFloor = false
 
-        //check if elevator on the same floor as enemy
+        // check if elevator on the same floor as enemy
         let ex = null
         for (const elevator of state.elevators.children) {
             const ey = elevator.position.y
